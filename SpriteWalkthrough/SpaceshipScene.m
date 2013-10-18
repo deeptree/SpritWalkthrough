@@ -42,19 +42,20 @@
 
 - (SKSpriteNode *) newSpaceship
 {
-//	SKSpriteNode *hull = [[SKSpriteNode alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(64, 32)];
-	SKSpriteNode *hull = [[SKSpriteNode alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(300, 32)];
-//	SKAction *hover = [SKAction sequence:@[
-//	                           [SKAction waitForDuration:1.0],
-//	                           [SKAction moveByX:100 y:50.0 duration:1.0],
-//                               [SKAction rotateByAngle:-360.0 duration:1.0],
-//	                           [SKAction waitForDuration:1.0],
-//	                           [SKAction moveByX:-100.0 y:-50 duration:1.0]]];
+	SKSpriteNode *hull = [[SKSpriteNode alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(64, 32)];
+//	SKSpriteNode *hull = [[SKSpriteNode alloc] initWithColor:[SKColor grayColor] size:CGSizeMake(600, 32)];
 	SKAction *hover = [SKAction sequence:@[
-                                           [SKAction waitForDuration:1.0],
-                                           [SKAction rotateByAngle:180.0 duration:1.0],
-                                           [SKAction waitForDuration:1.0]
-                                        ]];
+	                           [SKAction waitForDuration:1.0],
+	                           [SKAction moveByX:100 y:50.0 duration:1.0],
+	                           [SKAction waitForDuration:1.0],
+	                           [SKAction moveByX:-100.0 y:-50 duration:1.0]]];
+
+//旋轉試做
+//	SKAction *hover = [SKAction sequence:@[
+//                                           [SKAction waitForDuration:1.0],
+//                                           [SKAction rotateByAngle:180.0 duration:1.0],
+//                                           [SKAction waitForDuration:1.0]
+//                                        ]];
 	[hull runAction:[SKAction repeatActionForever:hover]];
 
 	// add light node to spaceship
@@ -106,6 +107,7 @@ static inline CGFloat skRand(CGFloat low, CGFloat high)
 	rock.position = CGPointMake(skRand(0, self.size.width), self.size.height - 50);
 	rock.name = @"rock";
 	rock.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:rock.size];
+    rock.physicsBody.friction = 0.6;
 	rock.physicsBody.usesPreciseCollisionDetection = YES;
 	[self addChild:rock];
 }
