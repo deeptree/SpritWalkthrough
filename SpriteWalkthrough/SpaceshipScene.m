@@ -10,6 +10,7 @@
 
 @interface SpaceshipScene ()
 @property BOOL contentCreated;
+@property SKSpriteNode *spaceship;
 @end
 
 @implementation SpaceshipScene
@@ -27,10 +28,10 @@
 	self.backgroundColor = [SKColor blackColor];
 	self.scaleMode = SKSceneScaleModeAspectFit;
 
-	SKSpriteNode *spaceship = [self newSpaceship];
+	self.spaceship = [self newSpaceship];
 
-	spaceship.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - 150);
-	[self addChild:spaceship];
+	self.spaceship.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - 150);
+	[self addChild:self.spaceship];
 
 	SKAction *makeRocks = [SKAction sequence:@[
 	                               [SKAction performSelector:@selector(addRock) onTarget:self],
@@ -38,6 +39,29 @@
 	                       ]];
 
 	[self runAction:[SKAction repeatActionForever:makeRocks]];
+
+    //add a node wheel 2013.10/19 JJ
+
+    //This wouldn't create a new node instance !
+    //    SKSpriteNode *wheel = (SKSpriteNode *)[self childNodeWithName:@"wheel"];
+
+    //This will do create a new node instance !
+    SKSpriteNode *wheel = [[SKSpriteNode alloc] initWithColor:[SKColor redColor] size:CGSizeMake(64, 32)];
+
+
+    CGFloat circumference = wheel.size.height * M_PI;
+
+    SKAction *oneRevolution = [SKAction rotateByAngle:-M_PI*2 duration:2.0];
+    SKAction *moveRight = [SKAction moveByX:circumference y:0 duration:2.0];
+
+    SKAction *group = [SKAction group:@[oneRevolution, moveRight]];
+    [wheel runAction:[SKAction repeatActionForever:group]];
+    wheel.position =  CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame) - 20);
+
+    wheel.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:wheel.size];
+	wheel.physicsBody.dynamic = NO;
+
+    [self addChild: wheel];
 }
 
 - (SKSpriteNode *) newSpaceship
@@ -119,5 +143,8 @@ static inline CGFloat skRand(CGFloat low, CGFloat high)
             [node removeFromParent];
     }];
 }
+
+
+
 
 @end
